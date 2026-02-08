@@ -1,0 +1,132 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elemental Vibe</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #0f0f1e;
+      overflow-x: hidden;
+      font-family: 'Press Start 2P', monospace;
+      image-rendering: pixelated;
+    }
+
+    /* Refined Title Glow - Subtle Monument Valley style */
+    .pixel-text-glow {
+      text-shadow: 
+        0 0 12px rgba(78, 205, 196, 0.2),
+        0 0 24px rgba(78, 205, 196, 0.05);
+    }
+
+    /* Monument Valley Breathing Pulse */
+    @keyframes pulse-gentle {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.01); }
+    }
+    .animate-pulse-gentle {
+      animation: pulse-gentle 4s ease-in-out infinite;
+    }
+
+    /* Floating Stars */
+    @keyframes starFloat {
+      0%, 100% { transform: translateY(-10px); }
+      50% { transform: translateY(10px); }
+    }
+    .animate-star-float {
+      animation: starFloat var(--duration) ease-in-out infinite;
+      animation-delay: var(--delay);
+    }
+
+    /* Refined Meteor Animation: Perfectly Parallel -45 Degrees */
+    @keyframes meteorMovement {
+      0% {
+        transform: translate(0, 0);
+        opacity: 0;
+      }
+      5% {
+        opacity: 1;
+      }
+      95% {
+        opacity: 1;
+      }
+      100% {
+        /* Move enough to clear the screen regardless of aspect ratio */
+        transform: translate(-150vw, 150vw);
+        opacity: 0;
+      }
+    }
+    .animate-meteor {
+      animation: meteorMovement var(--duration) linear infinite;
+      animation-delay: var(--delay);
+      /* Base rotation for the meteor itself to face the direction of movement */
+      transform-origin: center;
+    }
+
+    /* Global Scanline Overlay */
+    .scanline-overlay {
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(78, 205, 196, 0.01),
+        rgba(78, 205, 196, 0.01) 2px,
+        transparent 2px,
+        transparent 4px
+      );
+      pointer-events: none;
+    }
+
+    /* Monument Valley Radial Gradients */
+    .bg-breathing-gradient {
+      background: 
+        radial-gradient(circle at 30% 20%, rgba(78, 205, 196, 0.04) 0%, transparent 50%),
+        radial-gradient(circle at 70% 80%, rgba(255, 217, 61, 0.02) 0%, transparent 50%),
+        radial-gradient(circle at 50% 60%, rgba(149, 225, 211, 0.03) 0%, transparent 60%),
+        linear-gradient(to bottom, #1a1a2e, #0f0f1e);
+    }
+
+    /* Professional Button Hover */
+    .btn-refined-hover {
+      transition: all 0.2s ease;
+    }
+    .btn-refined-hover:hover {
+      transform: scale(1.02) translateY(-2px);
+      box-shadow: 0 0 20px rgba(78, 205, 196, 0.4);
+    }
+
+    /* Custom Input Focus */
+    .input-elegant:focus {
+      outline: none;
+      box-shadow: 0 0 0 4px rgba(78, 205, 196, 0.2);
+      border-color: #4ecdc4 !important;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-elegant-fade {
+      animation: fadeIn 0.8s ease-out forwards;
+    }
+  </style>
+  <script type="importmap">
+  {
+    "imports": {
+      "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+      "react/": "https://esm.sh/react@^19.2.4/",
+      "react": "https://esm.sh/react@^19.2.4",
+      "@google/genai": "https://esm.sh/@google/genai@^1.40.0"
+    }
+  }
+  </script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body class="bg-breathing-gradient">
+  <div id="root"></div>
+<script type="module" src="/index.tsx"></script>
+</body>
+</html>
