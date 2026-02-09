@@ -91,7 +91,7 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({
       {/* --- HEADER SECTION --- */}
       <div className="text-center mb-6 relative z-10 w-full max-w-3xl mx-auto space-y-2">
         <p className="text-[#AEB6C4] text-[11px] tracking-[0.3em] uppercase font-medium opacity-80">
-          The cosmos has spoken.
+          The cosmos has spoken, {name}.
         </p>
 
         <h1 className="text-[26px] md:text-[36px] text-white mb-1 font-['Press_Start_2P'] leading-tight tracking-wide drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">

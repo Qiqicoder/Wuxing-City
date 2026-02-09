@@ -48,9 +48,9 @@ const CityExplorer: React.FC<CityExplorerProps> = ({ cityData, onBack, character
 
         const loop = () => {
             if (movingLeft && !movingRight) {
-                setCharPos(prev => Math.max(0, prev - 0.5));
+                setCharPos(prev => (prev <= 0 ? 100 : prev - 0.05));
             } else if (movingRight && !movingLeft) {
-                setCharPos(prev => Math.min(100, prev + 0.5));
+                setCharPos(prev => (prev >= 100 ? 0 : prev + 0.05));
             }
             animationFrameId = requestAnimationFrame(loop);
         };
@@ -149,7 +149,7 @@ const CityExplorer: React.FC<CityExplorerProps> = ({ cityData, onBack, character
                     left: `${charPos}%`,
                     bottom: '10%',
                     transform: `translateX(-50%) ${direction === 'left' ? 'scaleX(-1)' : 'scaleX(1)'}`,
-                    height: '120px', // Adjust based on asset size
+                    height: '200px', // Double size
                     width: 'auto'
                 }}
             >
