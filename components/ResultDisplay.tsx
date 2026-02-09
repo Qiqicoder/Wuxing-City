@@ -27,6 +27,7 @@ interface ResultDisplayProps {
   scores: ElementScores | null;
   error: string | null;
   onReset: () => void;
+  onExplore: (cityData: any) => void;
 }
 
 const ResultDisplay: React.FC<ResultDisplayProps> = ({
@@ -34,26 +35,16 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({
   result,
   scores,
   error,
-  onReset
+  onReset,
+  onExplore
 }) => {
   // Map Soul City to City Data
-  const [showCityExplorer, setShowCityExplorer] = React.useState(false);
   const cityData = result ? getCityData(result.soulCity) : null;
 
   // Get archetype if scores exist
   const archetype = scores ? determineArchetype(scores) : null;
   const assets = archetype ? ARCHETYPE_ASSETS[archetype.name] : null;
   const characterSrc = assets?.front;
-
-  // Render City Explorer if active
-  if (showCityExplorer && cityData) {
-    return (
-      <CityExplorer
-        cityData={cityData}
-        onBack={() => setShowCityExplorer(false)}
-      />
-    );
-  }
 
   // Error state
   if (error || !result) {
@@ -168,7 +159,7 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({
               <span className="text-[20px] font-['Press_Start_2P'] text-white">
                 {result.soulCity.split(/[-—,]/)[0]}
               </span>
-              <p className="text-[#E6EAF2] text-[14px] md:text-[15px] leading-[1.6] font-light">
+              <p className="text-[#E6EAF2] text-[14px] md:text-[15px] leading-[1.6] font-['Inter'] font-light">
                 {result.soulCity.substring(result.soulCity.indexOf(result.soulCity.split(/[-—,]/)[0]) + result.soulCity.split(/[-—,]/)[0].length).replace(/^[-—,]\s*/, '')}
               </p>
             </div>
@@ -257,9 +248,9 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({
           {/* Re-Calibrate (Secondary) */}
           <button
             onClick={onReset}
-            className="px-8 py-3 bg-transparent border border-white/20 text-[#E6EAF2] text-[10px] 
+            className="px-8 py-3 bg-transparent border border-white/20 text-[#E6EAF2] text-[11px] 
                        hover:bg-white/5 hover:border-white/40 hover:text-white
-                       transition-all duration-300 tracking-[0.3em] uppercase font-bold text-xs"
+                       transition-all duration-300 tracking-[0.2em] uppercase font-bold font-['Press_Start_2P']"
           >
             Re-Calibrate
           </button>
@@ -267,8 +258,8 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({
           {/* Enter City (Primary) */}
           {cityData ? (
             <button
-              onClick={() => setShowCityExplorer(true)}
-              className="px-8 py-3 bg-[#4a6fa5] border border-[#4a6fa5] text-white text-[12px] 
+              onClick={() => onExplore(cityData)}
+              className="px-8 py-3 bg-[#4a6fa5] border border-[#4a6fa5] text-white text-[11px] 
                          hover:bg-[#5a7fb5] hover:scale-105 shadow-lg shadow-[#4a6fa5]/30
                          transition-all duration-300 tracking-[0.2em] uppercase font-bold font-['Press_Start_2P']"
             >
@@ -277,7 +268,7 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({
           ) : (
             <button
               disabled
-              className="px-8 py-3 bg-white/5 border border-white/10 text-white/30 text-[10px] 
+              className="px-8 py-3 bg-white/5 border border-white/10 text-white/30 text-[11px] 
                           cursor-not-allowed tracking-[0.2em] uppercase font-bold font-['Press_Start_2P']"
             >
               City Locked

@@ -4,8 +4,10 @@ import InputForm from './components/InputForm';
 import ResultDisplay from './components/ResultDisplay';
 import Starfield from './components/Starfield';
 import LoadingScreen from './components/LoadingScreen';
+import CityExplorer from './components/CityExplorer';
+import { CityData } from './utils/cityData';
 import { GoogleGenAI, Type } from "@google/genai";
-import { calculateElements, getBirthSeason, determineArchetype, ElementScores, Archetype } from './utils/elements';
+import { calculateElements, getBirthSeason, determineArchetype, ElementScores, Archetype, ARCHETYPE_ASSETS } from './utils/elements';
 
 
 interface PersonalityResult {
@@ -32,6 +34,7 @@ const App: React.FC = () => {
   const [archetype, setArchetype] = useState<Archetype | null>(null);
   const [apiError, setApiError] = useState<string | null>(null);
   const [resetKey, setResetKey] = useState(0);
+  const [exploringCity, setExploringCity] = useState<CityData | null>(null);
 
   const fetchElementalProfile = async (name: string, birthdate: string, scores: ElementScores, arch: Archetype): Promise<PersonalityResult> => {
     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
@@ -187,6 +190,7 @@ const App: React.FC = () => {
     setApiError(null);
     setElementScores(null); // Reset scores
     setArchetype(null);
+    setExploringCity(null);
     setResetKey(prev => prev + 1);
   };
 
@@ -236,6 +240,9 @@ const App: React.FC = () => {
     };
   }, []);
 
+  // Calculate assets for rendering
+  const assets = archetype ? ARCHETYPE_ASSETS[archetype.name] : null;
+
   return (
     <div className="relative w-full min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background Audio */}
@@ -273,16 +280,28 @@ const App: React.FC = () => {
             <InputForm key={resetKey} onSubmit={handleFormSubmit} />
           ) : (
             userData && (
-              <div className="max-w-4xl w-full p-4 animate-elegant-fade">
-                <ResultDisplay
-                  name={userData.name}
-                  birthdate={userData.birthdate}
-                  result={apiResult}
-                  scores={elementScores} // Pass scores prop
-                  error={apiError}
-                  onReset={handleReset}
-                />
-              </div>
+              <>
+                {exploringCity ? (
+                  <CityExplorer
+                    cityData={exploringCity}
+                    onBack={() => setExploringCity(null)}
+                    characterFront={assets?.front || '/characters/cosmic-wanderer-front.svg'}
+                    characterSide={assets?.side || '/characters/cosmic-wanderer-side.svg'}
+                  />
+                ) : (
+                  <div className="max-w-4xl w-full p-4 animate-elegant-fade">
+                    <ResultDisplay
+                      name={userData.name}
+                      birthdate={userData.birthdate}
+                      result={apiResult}
+                      scores={elementScores} // Pass scores prop
+                      error={apiError}
+                      onReset={handleReset}
+                      onExplore={setExploringCity}
+                    />
+                  </div>
+                )}
+              </>
             )
           )}
         </div>

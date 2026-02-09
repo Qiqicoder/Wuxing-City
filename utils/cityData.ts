@@ -32,7 +32,7 @@ export const CITIES: Record<string, CityData> = {
                 icon: "🕰️",
                 type: "landmark",
                 top: "50%",
-                left: "34%"
+                left: "40%"
             },
             {
                 id: "london_eye",
@@ -50,7 +50,7 @@ export const CITIES: Record<string, CityData> = {
                 icon: "🌉",
                 type: "landmark",
                 top: "56%",
-                left: "74%"
+                left: "72%"
             },
             {
                 id: "phone_booth",
@@ -59,7 +59,7 @@ export const CITIES: Record<string, CityData> = {
                 icon: "📞",
                 type: "decoration",
                 top: "80%",
-                left: "22%"
+                left: "28%"
             },
             {
                 id: "underground",
@@ -112,7 +112,7 @@ export const CITIES: Record<string, CityData> = {
                 description: "An iconic red communications tower rising above the city skyline. Built in 1958, this 333-meter landmark offers stunning panoramic views of Tokyo and has become a symbol of Japan's post-war rebirth.",
                 icon: "🗼",
                 type: "landmark",
-                left: "52%",
+                left: "48%",
                 top: "40%"
             },
             {

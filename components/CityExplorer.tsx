@@ -4,11 +4,67 @@ import { CityData, Landmark } from '../utils/cityData';
 interface CityExplorerProps {
     cityData: CityData;
     onBack: () => void;
+    characterFront: string;
+    characterSide: string;
 }
 
-const CityExplorer: React.FC<CityExplorerProps> = ({ cityData, onBack }) => {
+const CityExplorer: React.FC<CityExplorerProps> = ({ cityData, onBack, characterFront, characterSide }) => {
     const [selectedLandmark, setSelectedLandmark] = useState<Landmark | null>(null);
     const [showFortune, setShowFortune] = useState(false);
+
+    // Character Loop
+    const [charPos, setCharPos] = useState(50); // percentage 0-100
+    const [isMoving, setIsMoving] = useState(false);
+    const [direction, setDirection] = useState<'left' | 'right'>('right');
+
+    useEffect(() => {
+        let animationFrameId: number;
+        let movingLeft = false;
+        let movingRight = false;
+
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') movingLeft = true;
+            if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') movingRight = true;
+            updateMovement();
+        };
+
+        const handleKeyUp = (e: KeyboardEvent) => {
+            if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') movingLeft = false;
+            if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') movingRight = false;
+            updateMovement();
+        };
+
+        const updateMovement = () => {
+            if (movingLeft && !movingRight) {
+                setIsMoving(true);
+                setDirection('left');
+            } else if (movingRight && !movingLeft) {
+                setIsMoving(true);
+                setDirection('right');
+            } else {
+                setIsMoving(false);
+            }
+        };
+
+        const loop = () => {
+            if (movingLeft && !movingRight) {
+                setCharPos(prev => Math.max(0, prev - 0.5));
+            } else if (movingRight && !movingLeft) {
+                setCharPos(prev => Math.min(100, prev + 0.5));
+            }
+            animationFrameId = requestAnimationFrame(loop);
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        window.addEventListener('keyup', handleKeyUp);
+        loop();
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+            window.removeEventListener('keyup', handleKeyUp);
+            cancelAnimationFrame(animationFrameId);
+        };
+    }, []);
     const [fortuneText, setFortuneText] = useState('');
     const [fortuneStep, setFortuneStep] = useState<'cookie' | 'cracking' | 'paper'>('cookie');
 
@@ -31,7 +87,7 @@ const CityExplorer: React.FC<CityExplorerProps> = ({ cityData, onBack }) => {
     };
 
     return (
-        <div className="relative w-full h-screen overflow-hidden bg-gray-900 font-['Press_Start_2P']">
+        <div className="fixed inset-0 z-[60] w-full h-full overflow-hidden bg-gray-900 font-['Press_Start_2P']">
 
             {/* Background Map */}
             <div className="absolute inset-0">
@@ -54,11 +110,11 @@ const CityExplorer: React.FC<CityExplorerProps> = ({ cityData, onBack }) => {
             {/* Back Button */}
             <button
                 onClick={onBack}
-                className="absolute top-6 right-6 z-50 bg-[#c41e3a] text-white p-3 rounded-full border-2 border-white shadow-lg hover:scale-110 transition-transform hover:bg-[#a01830]"
+                className="absolute top-6 left-6 z-50 bg-[#c41e3a] text-white p-3 rounded-full border-2 border-white shadow-lg hover:scale-110 transition-transform hover:bg-[#a01830]"
                 title="Return to Assessment"
             >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
             </button>
 
@@ -85,6 +141,25 @@ const CityExplorer: React.FC<CityExplorerProps> = ({ cityData, onBack }) => {
                     </div>
                 </div>
             ))}
+
+            {/* Character */}
+            <div
+                className="absolute z-50 transition-transform duration-100"
+                style={{
+                    left: `${charPos}%`,
+                    bottom: '10%',
+                    transform: `translateX(-50%) ${direction === 'left' ? 'scaleX(-1)' : 'scaleX(1)'}`,
+                    height: '120px', // Adjust based on asset size
+                    width: 'auto'
+                }}
+            >
+                <img
+                    src={isMoving ? characterSide : characterFront}
+                    alt="Character"
+                    className="h-full w-auto drop-shadow-lg"
+                    style={{ imageRendering: 'pixelated' }}
+                />
+            </div>
 
             {/* Fortune Cookie Trigger (Bottom Area) */}
             <div
