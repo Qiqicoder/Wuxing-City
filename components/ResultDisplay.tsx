@@ -8,7 +8,10 @@ import CityExplorer from './CityExplorer';
 interface PersonalityResult {
   opening: string;
   birthImagery: string;
-  soulCity: string;
+  soulCity: {
+    name: string;
+    description: string;
+  };
   complementarySouls: string;
   talismans: {
     color: string;
@@ -39,7 +42,7 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({
   onExplore
 }) => {
   // Map Soul City to City Data
-  const cityData = result ? getCityData(result.soulCity) : null;
+  const cityData = result ? getCityData(result.soulCity.name) : null;
 
   // Get archetype if scores exist
   const archetype = scores ? determineArchetype(scores) : null;
@@ -157,10 +160,10 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({
             </h3>
             <div className="flex flex-col gap-2">
               <span className="text-[20px] font-['Press_Start_2P'] text-white">
-                {result.soulCity.split(/[-—,]/)[0]}
+                {result.soulCity.name}
               </span>
               <p className="text-[#E6EAF2] text-[14px] md:text-[15px] leading-[1.6] font-['Inter'] font-light">
-                {result.soulCity.substring(result.soulCity.indexOf(result.soulCity.split(/[-—,]/)[0]) + result.soulCity.split(/[-—,]/)[0].length).replace(/^[-—,]\s*/, '')}
+                {result.soulCity.description}
               </p>
             </div>
           </div>

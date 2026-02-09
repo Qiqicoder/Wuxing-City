@@ -13,7 +13,10 @@ import { calculateElements, getBirthSeason, determineArchetype, ElementScores, A
 interface PersonalityResult {
   opening: string;
   birthImagery: string;
-  soulCity: string;
+  soulCity: {
+    name: string;
+    description: string;
+  };
   complementarySouls: string;
   talismans: {
     color: string;
@@ -63,8 +66,10 @@ const App: React.FC = () => {
 
     2. birthImagery (20-25w): Connect ${season} to primary element poetically
 
-    3. soulCity (30-35w): The user's city is ${assignedCity}. 2-3 sentences why it matches user's energy.
-      Ex: "Tokyo—where neon meets ancient temples. A city that rebuilt itself a thousand times..."
+    3. soulCity (30-35w):
+       - name: Use EXACTLY "${assignedCity}".
+       - description: 2-3 sentences why it matches user's energy.
+       Ex: "Tokyo", "where neon meets ancient temples. A city that rebuilt itself a thousand times..."
 
     4. complementarySouls (25-30w): "You're drawn to [Element] souls who [trait]..."
       Focus on weaker elements: ${Object.entries(scores).sort((a, b) => a[1] - b[1]).slice(0, 2).map(e => e[0]).join(', ')}
@@ -85,7 +90,7 @@ const App: React.FC = () => {
     {
       "opening": "",
       "birthImagery": "",
-      "soulCity": "",
+      "soulCity": {"name": "", "description": ""},
       "complementarySouls": "",
       "talismans": {"color": "", "item": "", "mantra": ""},
       "ps": "",
@@ -109,7 +114,14 @@ const App: React.FC = () => {
               properties: {
                 opening: { type: Type.STRING },
                 birthImagery: { type: Type.STRING },
-                soulCity: { type: Type.STRING },
+                soulCity: {
+                  type: Type.OBJECT,
+                  properties: {
+                    name: { type: Type.STRING },
+                    description: { type: Type.STRING }
+                  },
+                  required: ["name", "description"]
+                },
                 complementarySouls: { type: Type.STRING },
                 talismans: {
                   type: Type.OBJECT,

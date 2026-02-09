@@ -81,17 +81,17 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
       </div>
 
       {/* Main Content Anchor (Progress Bar Container) */}
-      <div className="relative flex flex-col items-center justify-center">
+      <div className="relative flex flex-col items-center justify-center w-full max-w-[400px] px-6">
 
         {/* Loading Text: 60px above progress bar */}
-        <div className="absolute bottom-[84px] w-[600px] text-center">
+        <div className="absolute bottom-[84px] w-full text-center">
           <p className="text-[#e5e7eb] text-[16px] tracking-[1px] transition-opacity duration-300 opacity-90 font-mono">
             {loadingMessages[textIndex]}
           </p>
         </div>
 
         {/* Mario-style Star: 30px above progress bar */}
-        <div className="absolute bottom-[54px] w-[400px] pointer-events-none">
+        <div className="absolute bottom-[54px] w-full pointer-events-none px-6">
           <div
             className="absolute"
             style={{
@@ -106,7 +106,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
         </div>
 
         {/* Progress Bar */}
-        <div className="w-[400px] h-[24px] border-[3px] border-[#4ecdc4] rounded-[4px] bg-[#1a1a3e] overflow-hidden relative">
+        <div className="w-full h-[24px] border-[3px] border-[#4ecdc4] rounded-[4px] bg-[#1a1a3e] overflow-hidden relative">
           <div
             className="h-full bg-gradient-to-r from-[#4ecdc4] to-[#95e1d3]"
             style={{ animation: 'fillProgress 8s cubic-bezier(0.1, 0.4, 0.2, 1) forwards' }}
@@ -116,13 +116,13 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
 
       <style dangerouslySetInnerHTML={{
         __html: `
+        @keyframes moveStar {
+          from { transform: translateX(-16px); }
+          to { transform: translateX(calc(100% - 16px)); }
+        }
         @keyframes fillProgress {
           from { width: 0%; }
           to { width: 100%; }
-        }
-        @keyframes moveStar {
-          from { transform: translateX(-16px); }
-          to { transform: translateX(384px); }
         }
         @keyframes starRotate {
           from { transform: rotate(0deg); }

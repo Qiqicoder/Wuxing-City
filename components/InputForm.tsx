@@ -18,7 +18,7 @@ const InputForm: React.FC<InputFormProps> = ({ onSubmit }) => {
   const validate = () => {
     const newErrors: { birthdate?: string; name?: string } = {};
     const dateRegex = /^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/\d{4}$/;
-    
+
     if (!birthdate) {
       newErrors.birthdate = "REQUIRED";
     } else if (!dateRegex.test(birthdate)) {
@@ -60,14 +60,14 @@ const InputForm: React.FC<InputFormProps> = ({ onSubmit }) => {
   };
 
   return (
-    <form 
+    <form
       onSubmit={handleSubmit}
       className="flex flex-col items-center justify-center w-full min-h-screen py-20 select-none"
     >
       {/* Title Section: Max-width 800px, Perfectly Centered */}
       <div className={`max-w-[800px] w-full flex flex-col items-center justify-center text-center transition-all duration-1000 ${isLoaded ? 'animate-elegant-fade' : 'opacity-0'}`}>
         <h1 className="text-[#ffffff] text-[24px] sm:text-[36px] md:text-[52px] tracking-[6px] leading-none pixel-text-glow whitespace-nowrap animate-pulse-gentle">
-          ELEMENTAL VIBE
+          WUXING CITY
         </h1>
         <p className="text-[#c0c0c0] text-[10px] md:text-[14px] mt-6 tracking-[3px] uppercase opacity-60">
           Discover Your Cosmic Nature
@@ -75,8 +75,8 @@ const InputForm: React.FC<InputFormProps> = ({ onSubmit }) => {
       </div>
 
       {/* Form Section: Spacing refined to 80px from title */}
-      <div className={`flex flex-col items-center w-full max-w-[400px] mt-[80px] transition-all duration-1000 delay-300 ${isLoaded ? 'animate-elegant-fade' : 'opacity-0'}`}>
-        
+      <div className={`flex flex-col items-center w-full max-w-[400px] px-6 mt-[60px] md:mt-[80px] transition-all duration-1000 delay-300 ${isLoaded ? 'animate-elegant-fade' : 'opacity-0'}`}>
+
         {/* Birthday Field */}
         <div className="w-full mb-8">
           <label className="block text-[#c0c0c0] text-[10px] mb-4 tracking-widest uppercase opacity-80">
