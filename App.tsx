@@ -190,8 +190,77 @@ const App: React.FC = () => {
     setResetKey(prev => prev + 1);
   };
 
+  // Audio ref
+  const audioRef = React.useRef<HTMLAudioElement>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const toggleAudio = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play().catch(e => console.log("Audio play failed:", e));
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+
+  // Try to autoplay on mount, and if failed, wait for first user interaction
+  React.useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    audio.volume = 0.5;
+
+    const attemptPlay = () => {
+      audio.play()
+        .then(() => {
+          setIsPlaying(true);
+          // Remove listener once successful
+          document.removeEventListener('click', attemptPlay);
+        })
+        .catch(error => {
+          console.log("Autoplay prevented:", error);
+          setIsPlaying(false);
+        });
+    };
+
+    // Try immediately
+    attemptPlay();
+
+    // Add listener for first interaction if immediate play fails
+    document.addEventListener('click', attemptPlay);
+
+    return () => {
+      document.removeEventListener('click', attemptPlay);
+    };
+  }, []);
+
   return (
     <div className="relative w-full min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Background Audio */}
+      <audio ref={audioRef} src="/audio/bgm.mp3" loop />
+
+      {/* Audio Control Button */}
+      <button
+        onClick={toggleAudio}
+        className="fixed top-4 right-4 z-50 p-2 rounded-full bg-black/30 hover:bg-black/50 text-white backdrop-blur-sm transition-all duration-300 border border-white/10"
+        title={isPlaying ? "Mute Music" : "Play Music"}
+      >
+        {isPlaying ? (
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+          </svg>
+        ) : (
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <line x1="23" y1="9" x2="17" y2="15"></line>
+            <line x1="17" y1="9" x2="23" y2="15"></line>
+          </svg>
+        )}
+      </button>
+
       {/* Background Starfield */}
       {!isLoading && <Starfield />}
 
