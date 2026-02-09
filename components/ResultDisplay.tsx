@@ -2,6 +2,9 @@ import React from 'react';
 import RadarChart from './RadarChart';
 import { determineArchetype, ElementScores, ARCHETYPE_ASSETS } from '../utils/elements';
 
+import { getCityData } from '../utils/cityData';
+import CityExplorer from './CityExplorer';
+
 interface PersonalityResult {
   opening: string;
   birthImagery: string;
@@ -33,10 +36,24 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({
   error,
   onReset
 }) => {
+  // Map Soul City to City Data
+  const [showCityExplorer, setShowCityExplorer] = React.useState(false);
+  const cityData = result ? getCityData(result.soulCity) : null;
+
   // Get archetype if scores exist
   const archetype = scores ? determineArchetype(scores) : null;
   const assets = archetype ? ARCHETYPE_ASSETS[archetype.name] : null;
   const characterSrc = assets?.front;
+
+  // Render City Explorer if active
+  if (showCityExplorer && cityData) {
+    return (
+      <CityExplorer
+        cityData={cityData}
+        onBack={() => setShowCityExplorer(false)}
+      />
+    );
+  }
 
   // Error state
   if (error || !result) {
@@ -234,16 +251,39 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({
           </p>
         </div>
 
-        {/* Reset Button */}
-        <div>
+        {/* Action Buttons */}
+        <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-8">
+
+          {/* Re-Calibrate (Secondary) */}
           <button
             onClick={onReset}
             className="px-8 py-3 bg-transparent border border-white/20 text-[#E6EAF2] text-[10px] 
-                       hover:bg-white/5 hover:border-[#8B9CFF] hover:text-[#8B9CFF] hover:scale-105
-                       transition-all duration-300 tracking-[0.3em] uppercase font-bold active:scale-95 font-['Press_Start_2P']"
+                       hover:bg-white/5 hover:border-white/40 hover:text-white
+                       transition-all duration-300 tracking-[0.3em] uppercase font-bold text-xs"
           >
             Re-Calibrate
           </button>
+
+          {/* Enter City (Primary) */}
+          {cityData ? (
+            <button
+              onClick={() => setShowCityExplorer(true)}
+              className="px-8 py-3 bg-[#4a6fa5] border border-[#4a6fa5] text-white text-[12px] 
+                         hover:bg-[#5a7fb5] hover:scale-105 shadow-lg shadow-[#4a6fa5]/30
+                         transition-all duration-300 tracking-[0.2em] uppercase font-bold font-['Press_Start_2P']"
+            >
+              Enter {cityData.name}
+            </button>
+          ) : (
+            <button
+              disabled
+              className="px-8 py-3 bg-white/5 border border-white/10 text-white/30 text-[10px] 
+                          cursor-not-allowed tracking-[0.2em] uppercase font-bold font-['Press_Start_2P']"
+            >
+              City Locked
+            </button>
+          )}
+
         </div>
       </div>
 
