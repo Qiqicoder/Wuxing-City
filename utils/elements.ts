@@ -104,7 +104,7 @@ export function determineArchetype(scores: ElementScores): Archetype {
   const secondary = elements[1].name;
 
   // Helper to check if two elements match a pair regardless of order
-  const checkPair = (e1: string, e2: string, t1: string, t2: string) => 
+  const checkPair = (e1: string, e2: string, t1: string, t2: string) =>
     (e1 === t1 && e2 === t2) || (e1 === t2 && e2 === t1);
 
   let archetypeTitle = "Cosmic Wanderer";
@@ -164,3 +164,56 @@ export function getBirthSeason(month: number): string {
  * Final: { fire: 20, water: 20, wood: 30, earth: 75, metal: 35 }
  * determineArchetype: { name: "Solar Nomad", primaryElement: "earth", secondaryElement: "wood" }
  */
+
+export interface ArchetypeAssets {
+  front: string;
+  side: string;
+}
+
+export const ARCHETYPE_ASSETS: Record<string, ArchetypeAssets> = {
+  "Tidal Sage": {
+    front: "/characters/tidal-sage-front.svg",
+    side: "/characters/tidal-sage-side.svg"
+  },
+  "Steam Oracle": {
+    front: "/characters/steam-oracle-front.svg",
+    side: "/characters/steam-oracle-side.svg"
+  },
+  "Ocean Dreamer": {
+    front: "/characters/ocean-dreamer-front.svg",
+    side: "/characters/ocean-dreamer-side.svg"
+  },
+  "Marsh Guardian": {
+    front: "/characters/marsh-guardian-front.svg",
+    side: "/characters/marsh-guardian-side.svg"
+  },
+  "Forge Master": {
+    front: "/characters/forge-master-front.svg",
+    side: "/characters/forge-master-side.svg"
+  },
+  "Iron Oak": {
+    front: "/characters/iron-oak-front.svg",
+    side: "/characters/iron-oak-side.svg"
+  },
+  "Stone Sentinel": {
+    front: "/characters/stone-sentinel-front.svg",
+    side: "/characters/stone-sentinel-side.svg"
+  },
+  "Verdant Spark": {
+    front: "/characters/verdant-spark-front.svg",
+    side: "/characters/verdant-spark-side.svg"
+  },
+  "Solar Nomad": {
+    front: "/characters/solar-nomad-front.svg",
+    side: "/characters/solar-nomad-side.svg"
+  },
+  "Forest Keeper": {
+    front: "/characters/forest-keeper-front.svg",
+    side: "/characters/forest-keeper-side.svg"
+  },
+  // Fallback
+  "Cosmic Wanderer": {
+    front: "/characters/cosmic-wanderer-front.svg",
+    side: "/characters/cosmic-wanderer-side.svg"
+  }
+};
