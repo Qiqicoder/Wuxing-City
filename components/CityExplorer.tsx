@@ -48,9 +48,9 @@ const CityExplorer: React.FC<CityExplorerProps> = ({ cityData, onBack, character
 
         const loop = () => {
             if (movingLeft && !movingRight) {
-                setCharPos(prev => (prev <= 0 ? 100 : prev - 0.05));
+                setCharPos(prev => (prev <= 0 ? 100 : prev - 0.15));
             } else if (movingRight && !movingLeft) {
-                setCharPos(prev => (prev >= 100 ? 0 : prev + 0.05));
+                setCharPos(prev => (prev >= 100 ? 0 : prev + 0.15));
             }
             animationFrameId = requestAnimationFrame(loop);
         };
@@ -74,11 +74,10 @@ const CityExplorer: React.FC<CityExplorerProps> = ({ cityData, onBack, character
         const randomFortune = cityData.fortunes[Math.floor(Math.random() * cityData.fortunes.length)];
         setFortuneText(randomFortune);
         setShowFortune(true);
-        setFortuneStep('cookie');
+        setFortuneStep('cookie'); // Start with cookie
 
-        // Animation sequence
-        setTimeout(() => setFortuneStep('cracking'), 100);
-        setTimeout(() => setFortuneStep('paper'), 900);
+        // Animation sequence - open directly to paper after short delay, skip cracking
+        setTimeout(() => setFortuneStep('paper'), 600);
     };
 
     const handleCloseFortune = () => {
@@ -144,12 +143,12 @@ const CityExplorer: React.FC<CityExplorerProps> = ({ cityData, onBack, character
 
             {/* Character */}
             <div
-                className="absolute z-50 transition-transform duration-100"
+                className="absolute z-50"
                 style={{
                     left: `${charPos}%`,
                     bottom: '10%',
                     transform: `translateX(-50%) ${direction === 'left' ? 'scaleX(-1)' : 'scaleX(1)'}`,
-                    height: '200px', // Double size
+                    height: '20vh', // Changed to viewport height for consistency
                     width: 'auto'
                 }}
             >
@@ -207,7 +206,7 @@ const CityExplorer: React.FC<CityExplorerProps> = ({ cityData, onBack, character
             {showFortune && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#2c3e50]/90 backdrop-blur-md animate-in fade-in duration-300" onClick={handleCloseFortune}>
                     <div
-                        className="bg-[#fffef0] p-10 rounded-3xl max-w-sm w-[90%] text-center shadow-2xl border-[6px] border-[#ff8c00] relative overflow-hidden"
+                        className="bg-[#fffef0] p-10 rounded-3xl max-w-sm w-[90%] text-center shadow-2xl border-[6px] border-[#ff8c00] relative overflow-hidden flex flex-col items-center"
                         onClick={(e) => e.stopPropagation()}
                     >
                         <button
@@ -217,14 +216,12 @@ const CityExplorer: React.FC<CityExplorerProps> = ({ cityData, onBack, character
                             &times;
                         </button>
 
-                        {/* Cookie Animation Stage */}
-                        <div className="h-32 flex items-center justify-center mb-4 perspective-1000">
+                        {/* Cookie Animation Stage - Use min-height instead of fixed height */}
+                        <div className="min-h-[128px] w-full flex items-center justify-center mb-4 perspective-1000">
                             {fortuneStep === 'cookie' && (
                                 <div className="text-[80px] animate-[ping_1s_cubic-bezier(0,0,0.2,1)_infinite]">🥠</div>
                             )}
-                            {fortuneStep === 'cracking' && (
-                                <div className="text-[80px] animate-[spin_0.5s_ease-out]">💥</div>
-                            )}
+                            {/* Removed cracking step */}
                             {fortuneStep === 'paper' && (
                                 <div className="w-full bg-white p-6 border-2 border-dashed border-[#d4a300] shadow-md transform animate-[slideInUp_0.5s_ease-out]">
                                     <p className="text-[#2c3e50] font-['VT323'] text-2xl italic leading-relaxed">
@@ -235,7 +232,7 @@ const CityExplorer: React.FC<CityExplorerProps> = ({ cityData, onBack, character
                         </div>
 
                         {fortuneStep === 'paper' && (
-                            <p className="text-[#ff8c00] text-[10px] uppercase tracking-widest mt-4 font-bold">
+                            <p className="text-[#ff8c00] text-[10px] uppercase tracking-widest mt-4 font-bold shrink-0">
                                 Wisdom from the City
                             </p>
                         )}

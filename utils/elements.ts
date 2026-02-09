@@ -49,18 +49,29 @@ export function calculateElements(birthdate: string, name: string): ElementScore
   else if ([8, 9].includes(yearDigit)) scores.earth += 25;
 
   // Step 3: Birth Month Bonus (+20 points)
-  if ([1, 2, 11, 12].includes(month)) scores.water += 20;
-  else if ([3, 4].includes(month)) scores.wood += 20;
-  else if ([5, 6].includes(month)) scores.fire += 20;
-  else if ([7, 8].includes(month)) scores.earth += 20;
-  else if ([9, 10].includes(month)) scores.metal += 20;
+  // Balanced distribution (approx 2-3 months each)
+  // Water: Dec, Jan (Winter)
+  // Wood: Feb, Mar (spring start)
+  // Fire: May, Jun, Jul (Summer peak)
+  // Metal: Aug, Sep, Oct (Autumn)
+  // Earth: Apr, Nov (Transitions) + distributed
+
+  if ([12, 1, 11].includes(month)) scores.water += 20;      // Winter + Late Autumn -> Water (3)
+  else if ([2, 3].includes(month)) scores.wood += 20;       // Spring -> Wood (2)
+  else if ([5, 6, 7].includes(month)) scores.fire += 20;    // Summer -> Fire (3)
+  else if ([8, 9, 10].includes(month)) scores.metal += 20;  // Autumn -> Metal (3)
+  else if ([4].includes(month)) scores.earth += 20;         // Sprint transition -> Earth (1)
+
+  // To ensure Earth isn't too low, we rely on Day/Name balance. 
+  // Adjusted mapping to ensure Earth gets some love in "Day".
 
   // Step 4: Birth Day Bonus (+15 points)
   const dayRemainder = day % 5;
   if (dayRemainder === 0) scores.metal += 15;
-  else if ([1, 2].includes(dayRemainder)) scores.water += 15;
-  else if (dayRemainder === 3) scores.wood += 15;
-  else if (dayRemainder === 4) scores.fire += 15;
+  else if (dayRemainder === 1) scores.water += 15;
+  else if (dayRemainder === 2) scores.wood += 15;
+  else if (dayRemainder === 3) scores.fire += 15;
+  else if (dayRemainder === 4) scores.earth += 15; // Added Earth case (was missing or merged)
 
   // Step 5: Name Length Bonus (+10 points)
   const lengthRemainder = name.length % 5;

@@ -7,18 +7,18 @@ interface LoadingScreenProps {
 
 const StarSVG = () => (
   <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-    <rect x="14" y="2" width="4" height="4" fill="#ffd93d"/>
-    <rect x="12" y="6" width="8" height="2" fill="#ffd93d"/>
-    <rect x="2" y="12" width="4" height="4" fill="#ffd93d"/>
-    <rect x="6" y="10" width="2" height="8" fill="#ffd93d"/>
-    <rect x="26" y="12" width="4" height="4" fill="#ffd93d"/>
-    <rect x="24" y="10" width="2" height="8" fill="#ffd93d"/>
-    <rect x="10" y="10" width="12" height="12" fill="#ffd93d"/>
-    <rect x="8" y="22" width="4" height="4" fill="#ffd93d"/>
-    <rect x="10" y="26" width="2" height="2" fill="#ffd93d"/>
-    <rect x="20" y="22" width="4" height="4" fill="#ffd93d"/>
-    <rect x="20" y="26" width="2" height="2" fill="#ffd93d"/>
-    <rect x="13" y="13" width="6" height="6" fill="#fff9e6"/>
+    <rect x="14" y="2" width="4" height="4" fill="#ffd93d" />
+    <rect x="12" y="6" width="8" height="2" fill="#ffd93d" />
+    <rect x="2" y="12" width="4" height="4" fill="#ffd93d" />
+    <rect x="6" y="10" width="2" height="8" fill="#ffd93d" />
+    <rect x="26" y="12" width="4" height="4" fill="#ffd93d" />
+    <rect x="24" y="10" width="2" height="8" fill="#ffd93d" />
+    <rect x="10" y="10" width="12" height="12" fill="#ffd93d" />
+    <rect x="8" y="22" width="4" height="4" fill="#ffd93d" />
+    <rect x="10" y="26" width="2" height="2" fill="#ffd93d" />
+    <rect x="20" y="22" width="4" height="4" fill="#ffd93d" />
+    <rect x="20" y="26" width="2" height="2" fill="#ffd93d" />
+    <rect x="13" y="13" width="6" height="6" fill="#fff9e6" />
   </svg>
 );
 
@@ -28,19 +28,21 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
     "Consulting the archives...",
     "Reading your cosmic signature...",
     "Calculating elemental balance...",
+    "Aligning celestial coordinates...",
+    "Unlocking city gateway...",
     "Almost there..."
   ];
 
   useEffect(() => {
-    // Text rotation every 1 second
+    // Text rotation every 2 seconds
     const textInterval = setInterval(() => {
-      setTextIndex((prev) => (prev < 3 ? prev + 1 : prev));
-    }, 1000);
+      setTextIndex((prev) => (prev < loadingMessages.length - 1 ? prev + 1 : prev));
+    }, 2000);
 
-    // Completion after exactly 4 seconds
+    // Completion after exactly 8 seconds
     const completionTimeout = setTimeout(() => {
       onComplete();
-    }, 4000);
+    }, 8000);
 
     return () => {
       clearInterval(textInterval);
@@ -80,7 +82,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
 
       {/* Main Content Anchor (Progress Bar Container) */}
       <div className="relative flex flex-col items-center justify-center">
-        
+
         {/* Loading Text: 60px above progress bar */}
         <div className="absolute bottom-[84px] w-[600px] text-center">
           <p className="text-[#e5e7eb] text-[16px] tracking-[1px] transition-opacity duration-300 opacity-90 font-mono">
@@ -90,10 +92,10 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
 
         {/* Mario-style Star: 30px above progress bar */}
         <div className="absolute bottom-[54px] w-[400px] pointer-events-none">
-          <div 
+          <div
             className="absolute"
-            style={{ 
-              animation: 'moveStar 4s linear forwards',
+            style={{
+              animation: 'moveStar 8s cubic-bezier(0.1, 0.4, 0.2, 1) forwards',
               left: '0'
             }}
           >
@@ -105,14 +107,15 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
 
         {/* Progress Bar */}
         <div className="w-[400px] h-[24px] border-[3px] border-[#4ecdc4] rounded-[4px] bg-[#1a1a3e] overflow-hidden relative">
-          <div 
+          <div
             className="h-full bg-gradient-to-r from-[#4ecdc4] to-[#95e1d3]"
-            style={{ animation: 'fillProgress 4s linear forwards' }}
+            style={{ animation: 'fillProgress 8s cubic-bezier(0.1, 0.4, 0.2, 1) forwards' }}
           />
         </div>
       </div>
 
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style dangerouslySetInnerHTML={{
+        __html: `
         @keyframes fillProgress {
           from { width: 0%; }
           to { width: 100%; }

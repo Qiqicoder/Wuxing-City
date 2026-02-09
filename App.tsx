@@ -5,7 +5,7 @@ import ResultDisplay from './components/ResultDisplay';
 import Starfield from './components/Starfield';
 import LoadingScreen from './components/LoadingScreen';
 import CityExplorer from './components/CityExplorer';
-import { CityData } from './utils/cityData';
+import { CityData, CITIES } from './utils/cityData';
 import { GoogleGenAI, Type } from "@google/genai";
 import { calculateElements, getBirthSeason, determineArchetype, ElementScores, Archetype, ARCHETYPE_ASSETS } from './utils/elements';
 
@@ -36,8 +36,10 @@ const App: React.FC = () => {
   const [resetKey, setResetKey] = useState(0);
   const [exploringCity, setExploringCity] = useState<CityData | null>(null);
 
-  const fetchElementalProfile = async (name: string, birthdate: string, scores: ElementScores, arch: Archetype): Promise<PersonalityResult> => {
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const fetchElementalProfile = async (name: string, birthdate: string, scores: ElementScores, arch: Archetype, assignedCity: string): Promise<PersonalityResult> => {
+    // Conditional API Key based on environment (Local vs Vercel)
+    const apiKey = process.env.VERCEL ? process.env.GEMINI_API_KEY : process.env.API_KEY;
+    const ai = new GoogleGenAI({ apiKey });
 
     const month = parseInt(birthdate.split('/')[0]);
     const season = getBirthSeason(month);
@@ -61,7 +63,7 @@ const App: React.FC = () => {
 
     2. birthImagery (20-25w): Connect ${season} to primary element poetically
 
-    3. soulCity (30-35w): Pick ONE city: London/NYC/SF/Tokyo. 2-3 sentences why it matches user's energy.
+    3. soulCity (30-35w): The user's city is ${assignedCity}. 2-3 sentences why it matches user's energy.
       Ex: "Tokyo—where neon meets ancient temples. A city that rebuilt itself a thousand times..."
 
     4. complementarySouls (25-30w): "You're drawn to [Element] souls who [trait]..."
@@ -164,9 +166,15 @@ const App: React.FC = () => {
     console.log('🌸 Birth Season:', season);
     // === END NEW CODE ===
 
+    // === NEW: Randomly Assign City ===
+    const cityKeys = Object.keys(CITIES);
+    const randomCityKey = cityKeys[Math.floor(Math.random() * cityKeys.length)];
+    const assignedCity = CITIES[randomCityKey].name;
+    console.log(`🏙️ Randomly Assigned City: ${assignedCity}`);
+
     // 2. Start BOTH actions in parallel
     const loadingTimer = new Promise(resolve => setTimeout(resolve, 4000));
-    const apiCall = fetchElementalProfile(name, birthdate, scores, arch);
+    const apiCall = fetchElementalProfile(name, birthdate, scores, arch, assignedCity);
 
     try {
       // 3. Wait for BOTH to complete
